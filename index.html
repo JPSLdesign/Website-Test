@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZENSEI - Bonsai Serenity</title>
+    <style>
+        /* CSS Custom Properties for themes */
+        :root {
+            --font-size: 14px;
+            --background: #ffffff;
+            --foreground: oklch(0.145 0 0);
+            --card: #ffffff;
+            --card-foreground: oklch(0.145 0 0);
+            --primary: #030213;
+            --primary-foreground: oklch(1 0 0);
+            --secondary: oklch(0.95 0.0058 264.53);
+            --secondary-foreground: #030213;
+            --muted: #ececf0;
+            --muted-foreground: #717182;
+            --accent: #e9ebef;
+            --accent-foreground: #030213;
+            --border: rgba(0, 0, 0, 0.1);
+            --font-weight-medium: 500;
+            --font-weight-normal: 400;
+            --radius: 0.625rem;
+            --shimmer-base: var(--foreground);
+            --shimmer-highlight: #c0c0c0;
+        }
+
+        .dark {
+            --background: oklch(0.28 0 0);
+            --foreground: oklch(0.92 0 0);
+            --card: oklch(0.32 0 0);
+            --card-foreground: oklch(0.92 0 0);
+            --primary: oklch(0.92 0 0);
+            --primary-foreground: oklch(0.28 0 0);
+            --secondary: oklch(0.42 0 0);
+            --secondary-foreground: oklch(0.92 0 0);
+            --muted: oklch(0.38 0 0);
+            --muted-foreground: oklch(0.75 0 0);
+            --accent: oklch(0.42 0 0);
+            --accent-foreground: oklch(0.92 0 0);
+            --border: oklch(0.42 0 0);
+            --shimmer-base: var(--foreground);
+            --shimmer-highlight: #ffffff;
+        }
+
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: var(--font-size);
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--foreground);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 2rem;
+            font-weight: var(--font-weight-medium);
+            line-height: 1.5;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: var(--font-weight-medium);
+            line-height: 1.5;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: var(--font-weight-medium);
+            line-height: 1.5;
+        }
+
+        h4 {
+            font-size: 1rem;
+            font-weight: var(--font-weight-medium);
+            line-height: 1.5;
+        }
+
+        p {
+            font-size: 1rem;
+            font-weight: var(--font-weight-normal);
+            line-height: 1.5;
+        }
+
+        button {
+            font-size: 1rem;
+            font-weight: var(--font-weight-medium);
+            line-height: 1.5;
+        }
+
+        /* Utility classes */
+        .min-h-screen { min-height: 100vh; }
+        .w-full { width: 100%; }
+        .h-full { height: 100%; }
+        .flex { display: flex; }
+        .inline-flex { display: inline-flex; }
+        .grid { display: grid; }
+        .hidden { display: none; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .justify-between { justify-content: space-between; }
+        .text-center { text-align: center; }
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .sticky { position: sticky; }
+        .top-0 { top: 0; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        .z-50 { z-index: 50; }
+        .overflow-hidden { overflow: hidden; }
+        .cursor-pointer { cursor: pointer; }
+        .transition-all { transition: all 0.3s ease; }
+        .transition-colors { transition: color 0.3s ease; }
+        .transition-transform { transition: transform 0.3s ease-in-out; }
+
+        /* Layout classes */
+        .max-w-7xl { max-width: 80rem; margin-left: auto; margin-right: auto; }
+        .max-w-2xl { max-width: 42rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+
+        /* Spacing */
+        .p-4 { padding: 1rem; }
+        .p-6 { padding: 1.5rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+        .py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+        .pt-8 { padding-top: 2rem; }
+        .pb-4 { padding-bottom: 1rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .mb-16 { margin-bottom: 4rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        .mt-12 { margin-top: 3rem; }
+        .mx-2 { margin-left: 0.5rem; margin-right: 0.5rem; }
+
+        /* Grid */
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .gap-8 { gap: 2rem; }
+
+        /* Spacing utilities */
+        .space-x-4 > * + * { margin-left: 1rem; }
+        .space-x-6 > * + * { margin-left: 1.5rem; }
+        .space-x-8 > * + * { margin-left: 2rem; }
+        .space-y-2 > * + * { margin-top: 0.5rem; }
+
+        /* Header styles */
+        .header {
+            width: 100%;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .dark .header {
+            border-bottom-color: var(--border);
+            background-color: rgba(71, 71, 71, 0.8);
+        }
+
+        .header-container {
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 4rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.025em;
+        }
+
+        .nav {
+            display: none;
+            gap: 2rem;
+        }
+
+        .nav a {
+            color: rgba(var(--foreground), 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav a:hover {
+            color: var(--foreground);
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            color: var(--foreground);
+        }
+
+        .btn:hover {
+            background-color: var(--accent);
+        }
+
+        .separator {
+            width: 1px;
+            height: 1.5rem;
+            background-color: rgba(0, 0, 0, 0.2);
+            margin: 0 0.5rem;
+        }
+
+        .dark .separator {
+            background-color: var(--border);
+        }
+
+        /* Hero section */
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 60vh;
+            min-height: 400px;
+            overflow: hidden;
+        }
+
+        .hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-text {
+            max-width: 42rem;
+            padding: 0 1rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.025em;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .btn-primary {
+            background-color: white;
+            color: black;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Section styles */
+        .section {
+            padding: 5rem 1rem;
+        }
+
+        .section-muted {
+            background-color: rgba(236, 236, 240, 0.3);
+        }
+
+        .dark .section-muted {
+            background-color: rgba(97, 97, 97, 0.3);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-description {
+            color: var(--muted-foreground);
+            max-width: 42rem;
+            margin: 0 auto;
+        }
+
+        /* Grid layouts */
+        .bonsai-grid {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            gap: 2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            gap: 2rem;
+        }
+
+        /* Card styles */
+        .card {
+            background-color: var(--card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-image {
+            aspect-ratio: 1;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-image img {
+            transform: scale(1.05);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+        }
+
+        .card-price {
+            font-size: 1.125rem;
+            font-weight: 500;
+        }
+
+        .card-description {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .btn-outline {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            color: var(--foreground);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--accent);
+        }
+
+        /* Feature item styles */
+        .feature-item {
+            text-align: center;
+        }
+
+        .feature-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 3rem;
+            height: 3rem;
+            background-color: rgba(3, 2, 19, 0.1);
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+        }
+
+        .dark .feature-icon {
+            background-color: rgba(235, 235, 235, 0.1);
+        }
+
+        .feature-icon:hover {
+            transform: scale(1.25);
+        }
+
+        .feature-icon svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: var(--primary);
+        }
+
+        .feature-title {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-description {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            line-height: 1.6;
+        }
+
+        /* Footer styles */
+        .footer {
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            background-color: var(--background);
+        }
+
+        .dark .footer {
+            border-top-color: var(--border);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-brand {
+            grid-column: span 1;
+        }
+
+        .footer-title {
+            font-size: 1.5rem;
+            letter-spacing: -0.025em;
+            margin-bottom: 1rem;
+        }
+
+        .footer-description {
+            color: var(--muted-foreground);
+            max-width: 28rem;
+            line-height: 1.6;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-link {
+            color: var(--muted-foreground);
+            transition: color 0.3s ease;
+        }
+
+        .social-link:hover {
+            color: var(--foreground);
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: var(--muted-foreground);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--foreground);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            margin-top: 3rem;
+            padding-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .dark .footer-bottom {
+            border-top-color: var(--border);
+        }
+
+        .footer-bottom p {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.875rem;
+        }
+
+        .footer-bottom-links a {
+            color: var(--muted-foreground);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-bottom-links a:hover {
+            color: var(--foreground);
+        }
+
+        /* Shimmer animation */
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        .shimmer-text {
+            background: linear-gradient(
+                90deg,
+                var(--shimmer-base) 0%,
+                var(--shimmer-base) 30%,
+                var(--shimmer-highlight) 50%,
+                var(--shimmer-base) 70%,
+                var(--shimmer-base) 100%
+            );
+            background-size: 200% 100%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 2s ease-in-out forwards;
+        }
+
+        /* Responsive design */
+        @media (min-width: 640px) {
+            .px-sm-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+            .footer-bottom { flex-direction: row; justify-content: space-between; }
+        }
+
+        @media (min-width: 768px) {
+            .nav { display: flex; }
+            .bonsai-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .features-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .footer-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .footer-brand { grid-column: span 2; }
+            .hero h1 { font-size: 4rem; }
+            .hero p { font-size: 1.5rem; }
+            .section-title { font-size: 3rem; }
+        }
+
+        @media (min-width: 1024px) {
+            .px-lg-8 { padding-left: 2rem; padding-right: 2rem; }
+            .bonsai-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .features-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="header-content">
+                <!-- Logo -->
+                <div>
+                    <h1 class="logo">ZENSEI</h1>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="nav">
+                    <a href="#">Collection</a>
+                    <a href="#">Care Guide</a>
+                    <a href="#">About</a>
+                    <a href="#">Contact</a>
+                </nav>
+
+                <!-- Actions -->
+                <div class="actions">
+                    <button class="btn hidden sm:flex">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </button>
+                    <button class="btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </button>
+                    <button class="btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"></path>
+                            <path d="M4 7v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7"></path>
+                            <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0-4 0Z"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Separator -->
+                    <div class="separator"></div>
+
+                    <!-- Theme Toggle -->
+                    <button class="btn" id="theme-toggle">
+                        <svg id="moon-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+                        </svg>
+                        <svg id="sun-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                            <circle cx="12" cy="12" r="4"></circle>
+                            <path d="m12 2 0 2"></path>
+                            <path d="m12 20 0 2"></path>
+                            <path d="m4.93 4.93 1.41 1.41"></path>
+                            <path d="m17.66 17.66 1.41 1.41"></path>
+                            <path d="m2 12 2 0"></path>
+                            <path d="m20 12 2 0"></path>
+                            <path d="m6.34 17.66-1.41 1.41"></path>
+                            <path d="m19.07 4.93-1.41 1.41"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <img src="https://images.unsplash.com/photo-1720887790667-0e123a23c8e8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxqYXBhbmVzZSUyMGJvbnNhaSUyMGdhcmRlbiUyMHBlYWNlZnVsfGVufDF8fHx8MTc1NTgwMjY1OXww&ixlib=rb-4.1.0&q=80&w=1080" alt="Peaceful bonsai garden">
+            
+            <!-- Overlay -->
+            <div class="hero-overlay"></div>
+            
+            <!-- Content -->
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Cultivate Serenity</h1>
+                    <p>Discover our curated collection of authentic bonsai trees, each one a living artwork waiting to grace your space.</p>
+                    <button class="btn-primary">Explore Collection</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Bonsai -->
+        <section class="section">
+            <div class="max-w-7xl mx-auto">
+                <div class="section-header">
+                    <h2 class="section-title">Featured Collection</h2>
+                    <p class="section-description">
+                        Handpicked specimens from our master cultivators, each bonsai tells 
+                        a unique story of patience, artistry, and natural beauty.
+                    </p>
+                </div>
+
+                <div class="bonsai-grid">
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="https://images.unsplash.com/photo-1586440038776-0ce67a1f8334?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxib25zYWklMjB0cmVlJTIwZWxlZ2FudHxlbnwxfHx8fDE3NTU4MDI2NTl8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="Elegant Ficus">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <h3 class="card-title">Elegant Ficus</h3>
+                                <span class="card-price">$89</span>
+                            </div>
+                            <p class="card-description">
+                                Perfect for beginners, this hardy ficus brings calm to any room.
+                            </p>
+                            <button class="btn-outline">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="https://images.unsplash.com/photo-1511881346740-60bcc5769e35?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzbWFsbCUyMGJvbnNhaSUyMHBsYW50fGVufDF8fHx8MTc1NTkwMjUyMHww&ixlib=rb-4.1.0&q=80&w=1080" alt="Serene Pine">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <h3 class="card-title">Serene Pine</h3>
+                                <span class="card-price">$124</span>
+                            </div>
+                            <p class="card-description">
+                                A classic choice with elegant needle foliage and graceful form.
+                            </p>
+                            <button class="btn-outline">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="https://images.unsplash.com/photo-1652930653661-7d6b1774c183?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxqdW5pcGVyJTIwYm9uc2FpJTIwdHJlZXxlbnwxfHx8fDE3NTU4MDI2NjB8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="Majestic Juniper">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <h3 class="card-title">Majestic Juniper</h3>
+                                <span class="card-price">$156</span>
+                            </div>
+                            <p class="card-description">
+                                Outdoor beauty with stunning twisted trunk and dense foliage.
+                            </p>
+                            <button class="btn-outline">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="https://images.unsplash.com/photo-1753421537411-1d91510d5e3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYXBsZSUyMGJvbnNhaSUyMHJlZHxlbnwxfHx8fDE3NTU4MDI2NjB8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="Autumn Maple">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <h3 class="card-title">Autumn Maple</h3>
+                                <span class="card-price">$198</span>
+                            </div>
+                            <p class="card-description">
+                                Vibrant seasonal colors make this maple a year-round showpiece.
+                            </p>
+                            <button class="btn-outline">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="section section-muted">
+            <div class="max-w-7xl mx-auto">
+                <div class="section-header">
+                    <h2 class="section-title">The ZENSEI Difference</h2>
+                    <p class="section-description">
+                        More than just bonsai trees, we provide the knowledge and community 
+                        to nurture your passion for this ancient art form.
+                    </p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon" data-feature="0">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
+                                <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title" data-title="0">Expert Care Guides</h3>
+                        <p class="feature-description">
+                            Comprehensive guides from master cultivators to help your bonsai thrive for generations.
+                        </p>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon" data-feature="1">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title" data-title="1">Ancient Wisdom</h3>
+                        <p class="feature-description">
+                            Learn traditional techniques passed down through centuries of bonsai artistry.
+                        </p>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon" data-feature="2">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="m22 21-3-3"></path>
+                                <path d="M16 13a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title" data-title="2">Community</h3>
+                        <p class="feature-description">
+                            Join a passionate community of bonsai enthusiasts sharing knowledge and inspiration.
+                        </p>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon" data-feature="3">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1Z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title" data-title="3">Lifetime Support</h3>
+                        <p class="feature-description">
+                            Our commitment doesn't end at purchase. Get ongoing support for your bonsai journey.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="max-w-7xl mx-auto section">
+            <div class="footer-grid">
+                <!-- Brand -->
+                <div class="footer-brand">
+                    <h3 class="footer-title">ZENSEI</h3>
+                    <p class="footer-description">
+                        Cultivating serenity through the ancient art of bonsai. 
+                        Each tree is a meditation, a living sculpture that brings 
+                        peace to your space.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                                <path d="m16 11.37-4-4-4 4"></path>
+                                <path d="M12 15V7.37"></path>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="footer-section">
+                    <h4>Shop</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Indoor Bonsai</a></li>
+                        <li><a href="#">Outdoor Bonsai</a></li>
+                        <li><a href="#">Tools & Accessories</a></li>
+                        <li><a href="#">Care Products</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support -->
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Care Guide</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom -->
+            <div class="footer-bottom">
+                <p>© 2025 ZENSEI. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dark mode toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const moonIcon = document.getElementById('moon-icon');
+        const sunIcon = document.getElementById('sun-icon');
+        const body = document.body;
+
+        let isDarkMode = false;
+
+        themeToggle.addEventListener('click', () => {
+            isDarkMode = !isDarkMode;
+            
+            if (isDarkMode) {
+                body.classList.add('dark');
+                moonIcon.style.display = 'none';
+                sunIcon.style.display = 'block';
+            } else {
+                body.classList.remove('dark');
+                moonIcon.style.display = 'block';
+                sunIcon.style.display = 'none';
+            }
+        });
+
+        // Feature shimmer animation functionality
+        const featureIcons = document.querySelectorAll('[data-feature]');
+        const featureTitles = document.querySelectorAll('[data-title]');
+        
+        featureIcons.forEach((icon, index) => {
+            let shimmerCounter = 0;
+            
+            icon.addEventListener('mouseenter', () => {
+                shimmerCounter++;
+                const title = featureTitles[index];
+                title.classList.add('shimmer-text');
+                title.setAttribute('data-shimmer-key', shimmerCounter);
+            });
+            
+            icon.addEventListener('mouseleave', () => {
+                const title = featureTitles[index];
+                title.classList.remove('shimmer-text');
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
